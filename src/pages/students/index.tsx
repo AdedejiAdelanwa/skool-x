@@ -1,30 +1,57 @@
-import AppDrawer from "@/components/Drawer";
 import {
   Box,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
   Flex,
   Heading,
-  Input,
-  Text,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import Link from "next/link";
-import { FaChevronRight } from "react-icons/fa6";
+import { FaChevronRight, FaPlus } from "react-icons/fa6";
+import NewStudent from "./NewStudent";
+import AppButton from "@/components/Button";
+import { useEffect, useState } from "react";
+import { fetchStudents } from "@/utils/api";
+import { AppToast } from "@/components/AppToast";
+import { toast } from "react-toastify";
+import NewTeacher from "../teachers/Newteacher";
+import LayoutWapper from "@/components/LayoutWrapper";
 
 export default function Students() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // useEffect(()=>{
+
+  //   const getStudents = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       await new Promise((resolve) => setTimeout(resolve, 2000));
+  //       const response = await fetchStudents();
+  //       if ("error" in response) {
+  //         const { error } = response;
+  //         AppToast({
+  //           type: "error",
+  //           message: error,
+  //           placement: toast.POSITION.TOP_LEFT,
+  //         });
+  //         setIsLoading(false);
+  //       } else {
+  //         console.log(response);
+  //         setIsLoading(false);
+  //       }
+  //     } catch (error) {
+  //       setIsLoading(false);
+  //       toast.error(`${error}`, { position: toast.POSITION.TOP_LEFT });
+  //     }
+  //   };
+  //   getStudents();
+
+  // },[])
+
   return (
     <>
       <Head>
@@ -36,38 +63,25 @@ export default function Students() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box>
-        <Flex w="full" bg="white">
-          <VStack
-            w={["0%", "20%"]}
-            h={"100vh"}
-            display={["none", "flex"]}
-            bg="whitesmoke"
-          >
-            Hi
-          </VStack>
-          <Box py="20px" px="15px" w={["100%", "80%"]}>
-            <Breadcrumb
-              spacing="8px"
-              separator={<FaChevronRight color="gray.500" />}
-            >
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="/students">Students</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-
-            <Box mt="20px">
-              <Heading fontSize="2xl" mb="20px">All Students</Heading>
-              <Button onClick={onOpen} bg={"brand.peabuxblue"} color="white">Add Your Details</Button>
-              <AppDrawer title="Student Details" isOpen={isOpen} onClose={onClose}><form><Input type="text" placeholder="Type here..." /></form></AppDrawer>
-          
-            </Box>
-          </Box>
-        </Flex>
-      </Box>
+      <LayoutWapper
+        breadCrumbList={[
+          { name: "Home", url: "/" },
+          { name: "Students", url: "/students" },
+        ]}
+      >
+        <Heading fontSize="2xl" mb="20px">
+          All Students
+        </Heading>
+        <AppButton
+          appButtonType="peabuxblue"
+          isIcon={true}
+          icon={<FaPlus />}
+          onClick={onOpen}
+        >
+          Add Your Details
+        </AppButton>
+        <NewStudent addOpen={isOpen} onCloseAddDrawer={onClose} />
+      </LayoutWapper>
     </>
   );
 }

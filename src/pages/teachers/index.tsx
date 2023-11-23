@@ -4,9 +4,17 @@ import { Heading, useDisclosure } from "@chakra-ui/react";
 import Head from "next/head";
 import { FaPlus } from "react-icons/fa6";
 import NewTeacher from "./Newteacher";
+import { useEffect, useState } from "react";
+import { fetchTeachers } from "@/utils/api";
+import { AppToast } from "@/components/AppToast";
+import { toast } from "react-toastify";
+import TeachersTable from "./teachersTable";
 
 export default function Students() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  
   return (
     <>
       <Head>
@@ -36,6 +44,7 @@ export default function Students() {
           Add Your Details
         </AppButton>
         <NewTeacher addOpen={isOpen} onCloseAddDrawer={onClose} />
+      <TeachersTable />
       </LayoutWapper>
     </>
   );

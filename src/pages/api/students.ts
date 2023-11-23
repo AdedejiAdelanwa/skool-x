@@ -88,6 +88,45 @@ export interface Student extends User {
     }
   ];
 
+  const createStudent = async(req: NextApiRequest, res: NextApiResponse)=>{
+    try {
+      const { nationalId, firstname, surname, dateOfBirth, studentNumber } = req.body as Omit<Student, 'id'>;
+  
+      if (studentsDatabase.some(student => student.studentNumber === studentNumber)) {
+        return res.status(400).json({ error: 'Student with the same studentNumber already exists' });
+      }
+  
+      const id = studentsDatabase.length + 1;
+  
+      const newStudent: Student = {
+        id,
+        nationalId,
+        firstname,
+        surname,
+        dateOfBirth,
+        studentNumber,
+      };
+  
+      studentsDatabase.push(newStudent);
+  
+      res.status(201).json(newStudent);
+      res.statusMessage = `Student with student number ${newStudent.studentNumber} has successfully been created`;
+    } catch (error) {
+      console.error('Error adding student:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+  
+     const fetchStudents = async (req: NextApiRequest, res: NextApiResponse) => {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        res.status(200).json(studentsDatabase);
+      } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    };
+
   export default function handler(req: NextApiRequest, res: NextApiResponse<Student | { error: string }>) {
     if (req.method === 'POST') {
       createStudent(req,res)
@@ -99,44 +138,7 @@ export interface Student extends User {
     }
   }
 
-export const createStudent = async(req: NextApiRequest, res: NextApiResponse)=>{
-  try {
-    const { nationalId, firstname, surname, dateOfBirth, studentNumber } = req.body as Omit<Student, 'id'>;
 
-    if (studentsDatabase.some(student => student.studentNumber === studentNumber)) {
-      return res.status(400).json({ error: 'Student with the same studentNumber already exists' });
-    }
-
-    const id = studentsDatabase.length + 1;
-
-    const newStudent: Student = {
-      id,
-      nationalId,
-      firstname,
-      surname,
-      dateOfBirth,
-      studentNumber,
-    };
-
-    studentsDatabase.push(newStudent);
-
-    res.status(201).json(newStudent);
-    res.statusMessage = `Student with student number ${newStudent.studentNumber} has successfully been created`;
-  } catch (error) {
-    console.error('Error adding student:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
-
-  export const fetchStudents = async (req: NextApiRequest, res: NextApiResponse) => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      res.status(200).json(studentsDatabase);
-    } catch (error) {
-      console.error('Error fetching students:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
   
 
   

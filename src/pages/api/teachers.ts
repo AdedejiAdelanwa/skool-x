@@ -108,52 +108,68 @@ const teachersDatabase: Teacher[] = [
   },
 ];
 
-export default function createTeacher(
+const createTeacher = async(req: NextApiRequest, res:NextApiResponse)=>{
+  try {
+    const {
+      nationalId,
+      firstname,
+      surname,
+      dateOfBirth,
+      title,
+      teacherNumber,
+      salary,
+    } = req.body as Omit<Teacher, "id">;
+
+    if (
+      teachersDatabase.some(
+        (teacher) => teacher.teacherNumber === teacherNumber
+      )
+    ) {
+      return res
+        .status(400)
+        .json({
+          error: "teacher with the same teacherNumber already exists",
+        });
+    }
+    const id = teachersDatabase.length + 1;
+    const newTeacher: Teacher = {
+      id,
+      nationalId,
+      firstname,
+      surname,
+      title,
+      dateOfBirth,
+      teacherNumber,
+      salary,
+    };
+
+    teachersDatabase.push(newTeacher);
+    res.status(201).json(newTeacher);
+    res.statusMessage = `teacher with teacher number ${newTeacher.teacherNumber} has successfully been created`;
+  } catch (error) {
+      console.error('Error adding student:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+const fetchTeachers = async(req: NextApiRequest, res: NextApiResponse)=>{
+  try {
+    await new Promise(resolve => setTimeout(resolve,2000));
+    res.status(200).json(teachersDatabase);
+  } catch (error) {
+    console.error('Error fetching teachers:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Teacher | { error: string }>
 ) {
   if (req.method === "POST") {
-    try {
-      const {
-        nationalId,
-        firstname,
-        surname,
-        dateOfBirth,
-        title,
-        teacherNumber,
-        salary,
-      } = req.body as Omit<Teacher, "id">;
-
-      if (
-        teachersDatabase.some(
-          (teacher) => teacher.teacherNumber === teacherNumber
-        )
-      ) {
-        return res
-          .status(400)
-          .json({
-            error: "teacher with the same teacherNumber already exists",
-          });
-      }
-      const id = teachersDatabase.length + 1;
-      const newTeacher: Teacher = {
-        id,
-        nationalId,
-        firstname,
-        surname,
-        title,
-        dateOfBirth,
-        teacherNumber,
-        salary,
-      };
-
-      teachersDatabase.push(newTeacher);
-      res.status(201).json(newTeacher);
-      res.statusMessage = `teacher with teacher number ${newTeacher.teacherNumber} has successfully been created`;
-    } catch (error) {
-        console.error('Error adding student:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+  createTeacher(req,res)
+  }else if(req.method === "GET"){
+    fetchTeachers(req,res)
   }else{
     res.status(405).json({error: 'Method Not Allowed'})
   }

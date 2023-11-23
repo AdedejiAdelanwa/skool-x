@@ -61,3 +61,16 @@ export const fetchStudents = async(): Promise<Student[] | {error: string}> =>{
     return { error: "Internal Server Error" };
   }
 }
+export const fetchTeachers = async(): Promise<Teacher[] | {error: string}> =>{
+  try {
+    const response = await fetch("/api/teachers");
+    if(!response.ok){
+      throw new Error(`Failed to fetch  teachers: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching  teachers:", error);
+    return { error: "Internal Server Error" };
+  }
+}

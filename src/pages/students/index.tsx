@@ -1,16 +1,9 @@
 import {
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Button,
-  Flex,
   Heading,
-  VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { FaChevronRight, FaPlus } from "react-icons/fa6";
+import {  FaPlus } from "react-icons/fa6";
 import NewStudent from "./NewStudent";
 import AppButton from "@/components/Button";
 import { useEffect, useState } from "react";
@@ -19,6 +12,7 @@ import { AppToast } from "@/components/AppToast";
 import { toast } from "react-toastify";
 import NewTeacher from "../teachers/Newteacher";
 import LayoutWapper from "@/components/LayoutWrapper";
+import StudentsTable from "./studentsTable";
 
 export default function Students() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -81,6 +75,7 @@ export default function Students() {
           Add Your Details
         </AppButton>
         <NewStudent addOpen={isOpen} onCloseAddDrawer={onClose} />
+        <StudentsTable />
       </LayoutWapper>
     </>
   );

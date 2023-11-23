@@ -12,7 +12,6 @@ import TeachersTable from "./teachersTable";
 
 export default function Students() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   
   return (

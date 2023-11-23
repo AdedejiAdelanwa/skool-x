@@ -24,33 +24,33 @@ export default function Students() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // useEffect(()=>{
+  useEffect(()=>{
 
-  //   const getStudents = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       await new Promise((resolve) => setTimeout(resolve, 2000));
-  //       const response = await fetchStudents();
-  //       if ("error" in response) {
-  //         const { error } = response;
-  //         AppToast({
-  //           type: "error",
-  //           message: error,
-  //           placement: toast.POSITION.TOP_LEFT,
-  //         });
-  //         setIsLoading(false);
-  //       } else {
-  //         console.log(response);
-  //         setIsLoading(false);
-  //       }
-  //     } catch (error) {
-  //       setIsLoading(false);
-  //       toast.error(`${error}`, { position: toast.POSITION.TOP_LEFT });
-  //     }
-  //   };
-  //   getStudents();
+    const getStudents = async () => {
+      try {
+        setIsLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const response = await fetchStudents();
+        if ("error" in response) {
+          const { error } = response;
+          AppToast({
+            type: "error",
+            message: error,
+            placement: toast.POSITION.TOP_LEFT,
+          });
+          setIsLoading(false);
+        } else {
+          console.log(response);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        toast.error(`${error}`, { position: toast.POSITION.TOP_LEFT });
+      }
+    };
+    getStudents();
 
-  // },[])
+  },[])
 
   return (
     <>

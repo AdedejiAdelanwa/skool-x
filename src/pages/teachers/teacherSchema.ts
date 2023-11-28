@@ -19,9 +19,9 @@ export const teacherSchema = Yup.object({
       .max(10, "maximum of 10 characters")
       .required("Nation ID is required"),
     dateOfBirth: Yup.date()
-      .min(formattedMaxDate, "Must be at least 21 years old")
+      .max(formattedMaxDate, "Must be at least 21 years old")
       .required("date of Birth is required"),
     teacherNumber: Yup.string().required("Teacher number is required"),
-   title: Yup.string().required("Title is required"),
-   salary: Yup.string()
+    title: Yup.string(),
+   salary: Yup.number()
   });

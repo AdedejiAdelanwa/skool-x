@@ -51,7 +51,7 @@ const NewStudent = ({ addOpen, onCloseAddDrawer }: NewStudentProps) => {
     };
     try {
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       const result = await createNewStudent(newStudent);
       if ("error" in result) {
         const { error } = result;
@@ -67,14 +67,15 @@ const NewStudent = ({ addOpen, onCloseAddDrawer }: NewStudentProps) => {
         onCloseAddDrawer();
         AppToast({
           type: "success",
-          message: "Student added successfuly",
+          message: "Student added successfully",
           placement: toast.POSITION.TOP_LEFT,
         });
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       setIsLoading(false);
-      toast.error(`${error}`, { position: toast.POSITION.TOP_LEFT });
+      AppToast({type: "error", message: error, placement: toast.POSITION.TOP_LEFT,})
+      
     }
   };
 
@@ -84,7 +85,7 @@ const NewStudent = ({ addOpen, onCloseAddDrawer }: NewStudentProps) => {
       isOpen={addOpen}
       onClose={onCloseAddDrawer}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form aria-label="form" onSubmit={handleSubmit(onSubmit)}>
         <TextInput
           label="First Name"
           type="text"

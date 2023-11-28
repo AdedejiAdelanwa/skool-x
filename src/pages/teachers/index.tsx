@@ -12,7 +12,6 @@ import TeachersTable from "./teachersTable";
 
 export default function Students() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   
   return (
@@ -29,7 +28,7 @@ export default function Students() {
       <LayoutWapper
         breadCrumbList={[
           { name: "Home", url: "/" },
-          { name: "Students", url: "/teachers" },
+          { name: "Teachers", url: "/teachers" },
         ]}
       >
         <Heading fontSize="2xl" mb="20px">

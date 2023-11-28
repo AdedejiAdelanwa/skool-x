@@ -17,10 +17,11 @@ const TeachersTable = () => {
   }, []);
 
   useEffect(() => {
-    const getTeachers = async () => {
+    
+   (async () => {
       try {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+       
         const response = await fetchTeachers();
         if ("error" in response) {
           const { error } = response;
@@ -38,8 +39,7 @@ const TeachersTable = () => {
         setIsLoading(false);
         toast.error(`${error}`, { position: toast.POSITION.TOP_LEFT });
       }
-    };
-    getTeachers();
+    })();
   }, []);
 
   const dataSource: ITableData[] =
@@ -59,6 +59,7 @@ const TeachersTable = () => {
             <div className="ml-2">{`${row.firstname} ${row.surname}`}</div>
           </div>
         ),
+        nationalId: row.nationalId,
         doB: row.dateOfBirth,
         teacherNumber: row.teacherNumber,
         salary: row.salary,

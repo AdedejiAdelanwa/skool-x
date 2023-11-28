@@ -1,5 +1,5 @@
 import { ITableColumn, ITableData } from "@/components/Table/model";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { studentsTableColumns } from "./studentColumn";
 import { fetchStudents } from "@/utils/api";
 import { AppToast } from "@/components/AppToast";
@@ -15,12 +15,11 @@ const StudentsTable = () => {
   useEffect(() => {
     setColumns(studentsTableColumns);
   }, []);
-
+  
   useEffect(() => {
-    const getStudents = async () => {
+    (async () => {
       try {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         const response = await fetchStudents();
         if ("error" in response) {
           const { error } = response;
@@ -31,7 +30,6 @@ const StudentsTable = () => {
           });
           setIsLoading(false);
         } else {
-          console.log(response);
           setStudents(response);
           setIsLoading(false);
         }
@@ -39,8 +37,7 @@ const StudentsTable = () => {
         setIsLoading(false);
         toast.error(`${error}`, { position: toast.POSITION.TOP_LEFT });
       }
-    };
-    getStudents();
+    })();
   }, []);
 
   const dataSource: ITableData[] =
@@ -50,14 +47,14 @@ const StudentsTable = () => {
         uid: row.id,
         key: index,
         name: (
-          <div className="flex items-center text-gray-900 text-base font-medium">
-            <div className="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+          <span className="flex items-center text-gray-900 text-base font-medium">
+            <span className="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
               <span className="font-medium text-gray-600 dark:text-gray-300">
                 {row.firstname[0]} {row.surname[0]}
               </span>
-            </div>
-            <div className="ml-2">{`${row.firstname} ${row.surname}`}</div>
-          </div>
+            </span>
+            <span className="ml-2" data-testid={row.firstname}>{`${row.firstname} ${row.surname}`}</span>
+          </span>
         ),
         doB: row.dateOfBirth,
         studentNumber: row.studentNumber,

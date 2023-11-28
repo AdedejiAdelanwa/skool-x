@@ -34,6 +34,7 @@ export default function Students() {
           isIcon={true}
           icon={<FaPlus />}
           onClick={onOpen}
+          data-testid="addButton"
         >
           Add Your Details
         </AppButton>

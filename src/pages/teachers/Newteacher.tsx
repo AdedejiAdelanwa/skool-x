@@ -32,6 +32,7 @@ const NewTeacher = ({ addOpen, onCloseAddDrawer }: NewTeacherProps) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+
   const onSubmit = async ({
     firstname,
     surname,
@@ -47,13 +48,13 @@ const NewTeacher = ({ addOpen, onCloseAddDrawer }: NewTeacherProps) => {
       surname,
       nationalId,
       teacherNumber,
-      title,
+       title,
       dateOfBirth: formattedDate,
       salary,
     };
     try {
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       const result = await createNewTeacher(newTeacher);
       if ("error" in result) {
         const { error } = result;
@@ -69,16 +70,17 @@ const NewTeacher = ({ addOpen, onCloseAddDrawer }: NewTeacherProps) => {
         onCloseAddDrawer();
         AppToast({
           type: "success",
-          message: "teacher added successfuly",
+          message: "Teacher added successfully",
           placement: toast.POSITION.TOP_LEFT,
         });
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       setIsLoading(false);
-      toast.error(`${error}`, { position: toast.POSITION.TOP_LEFT });
+      AppToast({type: "error", message: error, placement: toast.POSITION.TOP_LEFT,})
     }
   };
+
 
   return (
     <AppDrawer
@@ -86,12 +88,11 @@ const NewTeacher = ({ addOpen, onCloseAddDrawer }: NewTeacherProps) => {
       isOpen={addOpen}
       onClose={onCloseAddDrawer}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form aria-label="form" onSubmit={handleSubmit(onSubmit)}>
         <AppSelect
           register={register}
           {...register("title")}
           errors={errors}
-      
           label="Title"
           cssClass="sm:col-span-3"
           required={true}
@@ -114,7 +115,7 @@ const NewTeacher = ({ addOpen, onCloseAddDrawer }: NewTeacherProps) => {
         <TextInput
           label="Date of Birth"
           type="date"
-          min={formattedMaxDate}
+          max={formattedMaxDate}
           required={true}
           {...register("dateOfBirth")}
           errors={errors}
@@ -138,7 +139,7 @@ const NewTeacher = ({ addOpen, onCloseAddDrawer }: NewTeacherProps) => {
           label="Salary"
           type="number"
           required={true}
-          {...register("teacherNumber")}
+          {...register("salary")}
           errors={errors}
         />
         <Flex className="col-span-6" justifyContent="space-between">
